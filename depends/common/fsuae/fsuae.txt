@@ -1,1 +1,1 @@
-fsuae https://github.com/libretro/libretro-fsuae libretro-fsuae
+fsuae https://github.com/garbear/libretro-fsuae fix-build
