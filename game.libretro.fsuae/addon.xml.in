@@ -12,7 +12,7 @@
 	<extension point="kodi.gameclient"
 			library_@PLATFORM@="@LIBRARY_FILENAME@">
 		<platforms></platforms>
-		<extensions></extensions>
+		<extensions>fs-uae</extensions>
 		<supports_vfs>false</supports_vfs>
 		<supports_standalone>false</supports_standalone>
 		<supports_keyboard>false</supports_keyboard>
@@ -22,7 +22,9 @@
 		<summary lang="en">Amiga (FS-UAE)</summary>
 		<description>UAE stands for the Ubiquitous Amiga Emulator. FS-UAE is a cross-platform port of UAE to the libretro API.
 
-Based on FS-UAE 2.8.1u5 (fs-uae.net)</description>
+Based on FS-UAE 2.8.1u5 (fs-uae.net)
+
+Supported file: .fs-uae</description>
 		<license>GPLv2</license>
 		<platform>@PLATFORM@</platform>
 	</extension>
