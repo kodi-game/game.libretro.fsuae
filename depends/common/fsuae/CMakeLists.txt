@@ -19,6 +19,7 @@ if(CORE_SYSTEM_NAME STREQUAL windows)
   find_package(MinGW REQUIRED)
   set(BUILD_COMMAND ${MINGW_MAKE} -j$ENV{NUMBER_OF_PROCESSORS} -C . -f Makefile.libretro platform=win  ${LIBRETRO_DEBUG} GIT_VERSION=)
 elseif(CORE_SYSTEM_NAME STREQUAL linux)
+  set(CONFIGURE_COMMAND ./autogen.sh && ./configure --build=x86_64-pc-linux-gnu --enable-shared --disable-static --enable-jit)
   set(BUILD_COMMAND $(MAKE) -C . -f Makefile.libretro  platform=unix ${LIBRETRO_DEBUG} GIT_VERSION=)
 elseif(CORE_SYSTEM_NAME STREQUAL osx)
   set(BUILD_COMMAND $(MAKE) -C . -f Makefile.libretro  platform=osx ${LIBRETRO_DEBUG} GIT_VERSION=)
@@ -50,7 +51,7 @@ endif()
 externalproject_add(${PROJECT_NAME}
                     SOURCE_DIR ${PROJECT_SOURCE_DIR}
                     PREFIX ${PROJECT_NAME}
-                    CONFIGURE_COMMAND ""
+                    CONFIGURE_COMMAND ${CTEST_CONFIGURE_COMMAND}
                     INSTALL_COMMAND ""
                     BUILD_COMMAND ${BUILD_COMMAND}
                     BUILD_IN_SOURCE 1)
