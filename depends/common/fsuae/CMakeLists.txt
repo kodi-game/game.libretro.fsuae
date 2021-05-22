@@ -51,7 +51,7 @@ endif()
 externalproject_add(${PROJECT_NAME}
                     SOURCE_DIR ${PROJECT_SOURCE_DIR}
                     PREFIX ${PROJECT_NAME}
-                    CONFIGURE_COMMAND ${CTEST_CONFIGURE_COMMAND}
+                    CONFIGURE_COMMAND ./autogen.sh && ./configure --build=x86_64-pc-linux-gnu --enable-shared --disable-static --enable-jit
                     INSTALL_COMMAND ""
                     BUILD_COMMAND ${BUILD_COMMAND}
                     BUILD_IN_SOURCE 1)
