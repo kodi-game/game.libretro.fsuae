@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="game.libretro.fsuae"
-		name="Amiga (FS-UAE)"
-		version="0.0.0"
-		provider-name="Libretro">
+		name="Commodore - Amiga (FS-UAE)"
+		version="0.0.1.1"
+		provider-name="FrodeSolheim">
 	<requires>
 		<import addon="game.libretro" version="1.0.0"/>
 		<import addon="game.controller.default" version="1.0.0"/>
@@ -12,16 +12,16 @@
 	<extension point="kodi.gameclient"
 			library_@PLATFORM@="@LIBRARY_FILENAME@">
 		<platforms></platforms>
-		<extensions>fs-uae</extensions>
+		<extensions></extensions>
 		<supports_vfs>false</supports_vfs>
 		<supports_standalone>false</supports_standalone>
-		<supports_keyboard>false</supports_keyboard>
-		<supports_mouse>false</supports_mouse>
+		<requires_opengl>true</requires_opengl>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Amiga (FS-UAE)</summary>
-		<description>UAE stands for the Ubiquitous Amiga Emulator. FS-UAE is a cross-platform port of UAE to the libretro API.</description>
 		<license>GPLv2</license>
 		<platform>@PLATFORM@</platform>
+		<source>https://github.com/kodi-game/game.libretro.fsuae</source>
+		<summary lang="en">Amiga (FS-UAE)</summary>
+		<description lang="en_GB">UAE stands for the Ubiquitous Amiga Emulator. FS-UAE is a cross-platform port of UAE to the libretro API.</description>
 	</extension>
 </addon>

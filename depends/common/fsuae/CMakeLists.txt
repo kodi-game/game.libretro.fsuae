@@ -17,18 +17,37 @@ endif()
 
 if(CORE_SYSTEM_NAME STREQUAL windows)
   find_package(MinGW REQUIRED)
-  set(BUILD_COMMAND ${MINGW_MAKE} -j$ENV{NUMBER_OF_PROCESSORS} -C . -f Makefile.libretro platform=win  ${LIBRETRO_DEBUG} GIT_VERSION=)
+  if(CPU STREQUAL arm64)
+    set(MSYSTEM MINGW64)
+  else()
+    set(MSYSTEM MINGW32)
+  endif()
+  set(BUILD_COMMAND ${MINGW_MAKE} -j$ENV{NUMBER_OF_PROCESSORS} -C . -f Makefile.libretro platform=win MSYSTEM=${MSYSTEM}  ${LIBRETRO_DEBUG} GIT_VERSION=)
 elseif(CORE_SYSTEM_NAME STREQUAL linux)
-  set(CONFIGURE_COMMAND ./autogen.sh && ./configure --build=x86_64-pc-linux-gnu --enable-shared --disable-static --enable-jit)
+  set(CONFIGURE_COMMAND
+    ./autogen.sh &&
+    ./configure &&
+    make gen
+  )
   set(BUILD_COMMAND $(MAKE) -C . -f Makefile.libretro  platform=unix ${LIBRETRO_DEBUG} GIT_VERSION=)
 elseif(CORE_SYSTEM_NAME STREQUAL osx)
   set(BUILD_COMMAND $(MAKE) -C . -f Makefile.libretro  platform=osx ${LIBRETRO_DEBUG} GIT_VERSION=)
-elseif(CORE_SYSTEM_NAME STREQUAL ios)
-  set(LIBRETRO_SONAME fsuae_libretro_ios${CMAKE_SHARED_LIBRARY_SUFFIX})
-  set(BUILD_COMMAND IOSSDK=${CMAKE_OSX_SYSROOT} $(MAKE) -C . -f Makefile.libretro  platform=ios ${LIBRETRO_DEBUG} GIT_VERSION=)
+elseif(CORE_SYSTEM_NAME STREQUAL ios OR CORE_SYSTEM_NAME STREQUAL darwin_embedded)
+  if(CORE_PLATFORM_NAME STREQUAL ios)
+    set(LIBRETRO_SONAME fsuae_libretro_ios${CMAKE_SHARED_LIBRARY_SUFFIX})
+    if(CPU STREQUAL arm64)
+      set(PLATFORM ios-arm64)
+    else()
+      set(PLATFORM ios)
+    endif()
+    set(BUILD_COMMAND IOSSDK=${CMAKE_OSX_SYSROOT} $(MAKE) -C . -f Makefile.libretro  platform=${PLATFORM} ${LIBRETRO_DEBUG} GIT_VERSION=)
+  elseif(CORE_PLATFORM_NAME STREQUAL tvos)
+    set(LIBRETRO_SONAME fsuae_libretro_tvos${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(BUILD_COMMAND IOSSDK=${CMAKE_OSX_SYSROOT} $(MAKE) -C . -f Makefile.libretro  platform=tvos-arm64 ${LIBRETRO_DEBUG} GIT_VERSION=)
+  endif()
 elseif(CORE_SYSTEM_NAME STREQUAL android)
-  if(NOT NDKROOT OR NOT SDK_PLATFORM)
-    message(FATAL_ERROR "${PROJECT_NAME} needs NDKROOT and SDK_PLATFORM for Android. Missing Toolchain file?")
+  if(NOT NDKROOT)
+    message(FATAL_ERROR "${PROJECT_NAME} needs NDKROOT for Android. Missing Toolchain file?")
   endif()
   if(CPU STREQUAL armeabi-v7a OR CPU STREQUAL arm64-v8a)
     set(PLATFORM ${CPU})
@@ -37,7 +56,7 @@ elseif(CORE_SYSTEM_NAME STREQUAL android)
   else()
     message(FATAL_ERROR "${PROJECT_NAME} needs Android ${CPU} build command in CMakeLists.txt!")
   endif()
-  set(BUILD_COMMAND GNUMAKE=$(MAKE) ${NDKROOT}/ndk-build -C jni APP_ABI=${PLATFORM} APP_PLATFORM=${SDK_PLATFORM} V7NEONOPTIMIZATION=1 GIT_VERSION=
+  set(BUILD_COMMAND GNUMAKE=$(MAKE) ${NDKROOT}/ndk-build -C jni APP_ABI=${PLATFORM} V7NEONOPTIMIZATION=1 GIT_VERSION=
                                     NDK_LIBS_OUT=${PROJECT_SOURCE_DIR}/${LIBRETRO_BINARY_DIR}  ${LIBRETRO_DEBUG} V=1
                     && cp ${PROJECT_SOURCE_DIR}/${LIBRETRO_BINARY_DIR}/${PLATFORM}/${LIBRETRO_JNISONAME} ${PROJECT_SOURCE_DIR}/${LIBRETRO_BINARY_DIR}/${LIBRETRO_SONAME})
 elseif(CORE_SYSTEM_NAME STREQUAL rbpi)
@@ -51,14 +70,11 @@ endif()
 externalproject_add(${PROJECT_NAME}
                     SOURCE_DIR ${PROJECT_SOURCE_DIR}
                     PREFIX ${PROJECT_NAME}
-                    CONFIGURE_COMMAND ./autogen.sh && ./configure --build=x86_64-pc-linux-gnu --enable-shared --disable-static --enable-jit
+                    CONFIGURE_COMMAND ${CONFIGURE_COMMAND}
                     INSTALL_COMMAND ""
                     BUILD_COMMAND ${BUILD_COMMAND}
                     BUILD_IN_SOURCE 1)
 
 # install the generated shared library
 install(FILES ${PROJECT_SOURCE_DIR}/${LIBRETRO_BINARY_DIR}/${LIBRETRO_SONAME}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-
-# write the config.cmake script
-file(WRITE ${CMAKE_INSTALL_PREFIX}/libretro-${PROJECT_NAME}-config.cmake "set(${PROJECT_NAME_UC}_LIB ${CMAKE_INSTALL_PREFIX}/lib/${LIBRETRO_SONAME})")
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/libretro RENAME fsuae_libretro${CMAKE_SHARED_LIBRARY_SUFFIX})
