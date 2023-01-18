@@ -21,7 +21,6 @@
 		<license>GPLv2</license>
 		<platform>@PLATFORM@</platform>
 		<source>https://github.com/kodi-game/game.libretro.fsuae</source>
-		<summary lang="en">Amiga (FS-UAE)</summary>
 		<summary lang="en_GB">Amiga (FS-UAE)</summary>
 		<description lang="en_GB">UAE stands for the Ubiquitous Amiga Emulator. FS-UAE is a cross-platform port of UAE to the libretro API.</description>
 	</extension>
