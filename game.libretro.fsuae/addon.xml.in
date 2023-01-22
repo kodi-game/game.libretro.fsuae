@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="game.libretro.fsuae"
 		name="Commodore - Amiga (FS-UAE)"
-		version="0.0.1.1"
+		version="0.0.1.2"
 		provider-name="FrodeSolheim">
 	<requires>
 		<import addon="game.libretro" version="1.0.0"/>
@@ -21,6 +21,9 @@
 		<license>GPLv2</license>
 		<platform>@PLATFORM@</platform>
 		<source>https://github.com/kodi-game/game.libretro.fsuae</source>
+		<assets>
+			<icon>resources/icon.png</icon>
+		</assets>
 		<summary lang="en_GB">Amiga (FS-UAE)</summary>
 		<description lang="en_GB">UAE stands for the Ubiquitous Amiga Emulator. FS-UAE is a cross-platform port of UAE to the libretro API.</description>
 	</extension>

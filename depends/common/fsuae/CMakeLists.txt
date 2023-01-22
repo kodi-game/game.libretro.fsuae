@@ -24,11 +24,7 @@ if(CORE_SYSTEM_NAME STREQUAL windows)
   endif()
   set(BUILD_COMMAND ${MINGW_MAKE} -j$ENV{NUMBER_OF_PROCESSORS} -C . -f Makefile.libretro platform=win MSYSTEM=${MSYSTEM}  ${LIBRETRO_DEBUG} GIT_VERSION=)
 elseif(CORE_SYSTEM_NAME STREQUAL linux)
-  set(CONFIGURE_COMMAND
-    ./autogen.sh &&
-    ./configure &&
-    make gen
-  )
+  set(CONFIGURE_COMMAND ./autogen.sh && ./configure && make gen)
   set(BUILD_COMMAND $(MAKE) -C . -f Makefile.libretro  platform=unix ${LIBRETRO_DEBUG} GIT_VERSION=)
 elseif(CORE_SYSTEM_NAME STREQUAL osx)
   set(BUILD_COMMAND $(MAKE) -C . -f Makefile.libretro  platform=osx ${LIBRETRO_DEBUG} GIT_VERSION=)
