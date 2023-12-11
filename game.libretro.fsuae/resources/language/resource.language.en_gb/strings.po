@@ -17,29 +17,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "Addon Summary"
-msgid "Amiga (FS-UAE)"
+msgid "Commodore - Amiga (FS-UAE)"
 msgstr ""
 
 msgctxt "Addon Description"
 msgid "UAE stands for the Ubiquitous Amiga Emulator. FS-UAE is a cross-platform port of UAE to the libretro API."
-msgstr ""
-
-msgctxt "#30000"
-msgid "Settings"
-msgstr ""
-
-msgctxt "#30001"
-msgid "Internal resolution"
-msgstr ""
-
-msgctxt "#30002"
-msgid "Pixel format"
-msgstr ""
-
-msgctxt "#30003"
-msgid "Joystick analog mode"
-msgstr ""
-
-msgctxt "#30004"
-msgid "Leds"
 msgstr ""

@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/kodi-game/game.libretro.fsuae.svg?branch=master)](https://travis-ci.org/kodi-game/game.libretro.fsuae)
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/kodi-game/game.libretro.fsuae?svg=true)](https://ci.appveyor.com/project/kodi-game/game-libretro-fsuae)
-
 # Commodore - Amiga (FS-UAE)
 
 ### Description
@@ -13,7 +10,7 @@ GPLv2
 
 ### Icon
 
-![Icon](game.libretro.fsuae/resources/icon.png)
+![Commodore - Amiga (FS-UAE) icon](game.libretro.fsuae/resources/icon.png)
 
 ### Fanart
 
