@@ -7,6 +7,21 @@ include(ExternalProject)
 
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UC)
 
+# Jenkins CI jobs can have this env var set
+# Use it if available
+if(DEFINED ENV{BUILDTHREADS})
+  set(build_job_count -j$ENV{BUILDTHREADS})
+  message(STATUS "Using $ENV{BUILDTHREADS} threads from ENV var BUILDTHREADS")
+else()
+  # Most likely a non CI build, so do a best attempt just using ProcessorCount
+  include(ProcessorCount)
+  ProcessorCount(cpu_count)
+  if(NOT cpu_count EQUAL 0)
+    set(build_job_count -j${cpu_count})
+    message(STATUS "Using ${cpu_count} threads deduced by ProcessorCount")
+  endif()
+endif()
+
 set(LIBRETRO_BINARY_DIR .)
 set(LIBRETRO_SONAME fsuae_libretro${CMAKE_SHARED_LIBRARY_SUFFIX})
 set(LIBRETRO_JNISONAME libretro${CMAKE_SHARED_LIBRARY_SUFFIX})
@@ -23,9 +38,9 @@ if(CORE_SYSTEM_NAME STREQUAL windows)
     set(MSYSTEM MINGW32)
   endif()
   set(BUILD_COMMAND ${MINGW_MAKE}
-                    -j$ENV{NUMBER_OF_PROCESSORS}
                     -C .
                     -f Makefile.libretro
+                    ${build_job_count}
                     ${LIBRETRO_DEBUG}
                     GIT_VERSION=
                     MSYSTEM=${MSYSTEM}
@@ -36,6 +51,7 @@ elseif(CORE_SYSTEM_NAME STREQUAL linux)
   set(BUILD_COMMAND $(MAKE)
                     -C .
                     -f Makefile.libretro
+                    ${build_job_count}
                     ${LIBRETRO_DEBUG}
                     GIT_VERSION=
                     platform=unix
@@ -49,6 +65,7 @@ elseif(CORE_SYSTEM_NAME STREQUAL osx)
   set(BUILD_COMMAND $(MAKE)
                     -C .
                     -f Makefile.libretro
+                    ${build_job_count}
                     ${LIBRETRO_DEBUG}
                     arch=${ARCH}
                     CROSS_COMPILE=1
@@ -68,6 +85,7 @@ elseif(CORE_SYSTEM_NAME STREQUAL ios OR CORE_SYSTEM_NAME STREQUAL darwin_embedde
     set(BUILD_COMMAND IOSSDK=${CMAKE_OSX_SYSROOT} $(MAKE)
                                                   -C .
                                                   -f Makefile.libretro
+                                                  ${build_job_count}
                                                   ${LIBRETRO_DEBUG}
                                                   GIT_VERSION=
                                                   platform=${PLATFORM}
@@ -77,6 +95,7 @@ elseif(CORE_SYSTEM_NAME STREQUAL ios OR CORE_SYSTEM_NAME STREQUAL darwin_embedde
     set(BUILD_COMMAND IOSSDK=${CMAKE_OSX_SYSROOT} $(MAKE)
                                                   -C .
                                                   -f Makefile.libretro
+                                                  ${build_job_count}
                                                   ${LIBRETRO_DEBUG}
                                                   GIT_VERSION=
                                                   platform=tvos-arm64
@@ -95,6 +114,7 @@ elseif(CORE_SYSTEM_NAME STREQUAL android)
   endif()
   set(BUILD_COMMAND GNUMAKE=$(MAKE) ${NDKROOT}/ndk-build
                                     -C jni
+                                    ${build_job_count}
                                     ${LIBRETRO_DEBUG}
                                     APP_ABI=${PLATFORM}
                                     APP_SHORT_COMMANDS=true
@@ -104,13 +124,12 @@ elseif(CORE_SYSTEM_NAME STREQUAL android)
                                     V7NEONOPTIMIZATION=1
                                     
                     && cp ${PROJECT_SOURCE_DIR}/${LIBRETRO_BINARY_DIR}/${PLATFORM}/${LIBRETRO_JNISONAME} ${PROJECT_SOURCE_DIR}/${LIBRETRO_BINARY_DIR}/${LIBRETRO_SONAME})
-elseif(CORE_SYSTEM_NAME STREQUAL rbpi)
-  message(FATAL_ERROR "${PROJECT_NAME} needs RPi build command in CMakeLists.txt!")
 elseif(CORE_SYSTEM_NAME STREQUAL freebsd)
   set(BUILD_COMMAND $(MAKE)
                     -C .
                     -f Makefile.libretro
-                    ${LIBRETRO_DEBUG
+                    ${build_job_count}
+                    ${LIBRETRO_DEBUG}
                     GIT_VERSION=
                     platform=unix
                     )
