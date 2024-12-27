@@ -25,6 +25,8 @@
 			<icon>resources/icon.png</icon>
 		</assets>
 		<summary lang="en_GB">Commodore - Amiga (FS-UAE)</summary>
+		<summary lang="es_ES">Commodore - Amiga (FS-UAE)</summary>
 		<description lang="en_GB">UAE stands for the Ubiquitous Amiga Emulator. FS-UAE is a cross-platform port of UAE to the libretro API.</description>
+		<description lang="es_ES">UAE son las siglas de Ubiquitous Amiga Emulator. FS-UAE es un port multiplataforma de UAE para la API libretro.</description>
 	</extension>
 </addon>
