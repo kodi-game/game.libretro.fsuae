@@ -1,1 +1,1 @@
-fsuae https://github.com/kodi-game/libretro-fsuae/archive/db00e95fc7dcbe29f16926ec749e4693136a5c22.tar.gz
+fsuae https://github.com/kodi-game/libretro-fsuae/archive/75a94d0dfc86c9dbeb71ff47a12e1fb7ed4045e3.tar.gz
